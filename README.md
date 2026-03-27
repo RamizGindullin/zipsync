@@ -1,14 +1,57 @@
-# zipsync
+This is a mirror to `stgatilov/zipsync`. The goal is to make the project compile on MacOS (as a first, albeit small, step to make The Dark Mod ported). The current version requires installation of Conan (see [here](https://docs.conan.io/2/installation.html])).
 
-This library allows to update a set of zips in local directory to match the set of zips stored on remote HTTP servers.
-In order to reduce amount of data downloaded, zipsync uses multipart byterange requests from HTTP 1.1 to download individual files from remote zip archives.
-Note that every file inside a zip archive takes contiguous segment of bytes, which makes such partial downloads possible.
-In order to detect which files must be downloaded, remote set of zips must have a "manifest", storing attributes and BLAKE2 hash of every file.
-The only steps necessary to share a set of zips by zipsync are 1) creating a manifest and 2) performing some normalization of zips.
-If several versions of the set are shared, then it is possible to store all versions except one as differentials, reducing storage requirements on server.
 
-The system was originally designed and implemented for [TheDarkMod](www.thedarkmod.com) game, but contains no code specific to it.
-The game is based on Doom 3 engine, which stores all its assets in zips archives. As of now, TDM contains more than 20000 files of total size 3.5 GB.
-The zipsync library allows to publish frequent beta and developer versions without wasting 3 GB per version both on server storage and download bandwidth.
+## How to compile
 
-The library is fully included into TheDarkMod source code repository as subdirectory.
+To compile on MacOS you need to open the Terminal:
+
+```
+cd /path/to/zipsync
+./conan_build.sh
+```
+
+The compiled files will be saved in `/path/to/zipsync/build/release`
+
+## Conan compatibility
+Conan doesn't currently know about Apple Clang 21 (shipped with Xcode 16.x). You need to add it manually:
+```
+bash
+nano ~/.conan2/settings.yml
+```
+Find the `apple-clang` version list and add "21" to the end:
+
+```
+apple-clang:
+    version: ["5.0", "5.1", "6.0", ..., "17", "17.0", "21"]
+```
+
+Save the file.
+
+
+## How to use zipsync
+
+In Terminal:
+```
+cd /path/to/zipsync/build/release
+```
+
+```
+BASE=http://tdm.frydrych.org/mirror/zipsync
+./zipsync update --clean \
+  -r <path to your installation> \
+  -t $BASE/release/release214_from_release213/manifest.iniz \
+  -p $BASE/release/release213_from_release212/manifest.iniz \
+  -p $BASE/release/release212_from_release211/manifest.iniz \
+  -p $BASE/release/release211_from_release210/manifest.iniz \
+  -p $BASE/release/release210_from_release209/manifest.iniz \
+  -p $BASE/release/release209_from_release208/manifest.iniz \
+  -p $BASE/release/release208_from_release207/manifest.iniz \
+  -p $BASE/release/release207_from_release206/manifest.iniz \
+  -p $BASE/release/release206_from_release205/manifest.iniz \
+  -p $BASE/release/release205_from_release204/manifest.iniz \
+  -p $BASE/release/release204_from_release203/manifest.iniz \
+  -p $BASE/release/release203_from_release202/manifest.iniz \
+  -p $BASE/release/release202_from_release201/manifest.iniz \
+  -p $BASE/release/release201_from_release200/manifest.iniz \
+  -p $BASE/release/release200/manifest.iniz
+```

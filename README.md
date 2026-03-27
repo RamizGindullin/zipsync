@@ -30,7 +30,7 @@ Save the file.
 
 ## How to use zipsync
 
-In Terminal:
+In Terminal (version 2.14):
 ```
 cd /path/to/zipsync/build/release
 ```
@@ -55,3 +55,5 @@ BASE=http://tdm.frydrych.org/mirror/zipsync
   -p $BASE/release/release201_from_release200/manifest.iniz \
   -p $BASE/release/release200/manifest.iniz
 ```
+
+This will allow you to download the content of TDM into your folder.

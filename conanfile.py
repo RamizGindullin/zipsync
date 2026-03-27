@@ -10,8 +10,8 @@ class ZipsyncConan(ConanFile):
         "minizip/1.3.1",
         "libcurl/8.6.0",
         "doctest/2.4.11",
-        "blake2/20190724@zipsync",
-        "args/6.4.6@zipsync",
+        "libb2/20190723",
+        "taywee-args/6.4.6",
         "libmicrohttpd/0.9.77",
     ]
 
@@ -21,7 +21,9 @@ class ZipsyncConan(ConanFile):
     def configure(self):
         self.options["minizip"].bzip2 = False
         self.options["libcurl"].with_ssl = False
-        self.options["BLAKE2"].SSE = "SSE2"
+        # SSE2 is x86/x86_64 only — ARM uses the reference implementation
+        is_x86 = self.settings.arch in ["x86", "x86_64"]
+        self.options["libb2"].use_sse = is_x86
 
     def build(self):
         cmake = CMake(self)

@@ -10,7 +10,7 @@ cd /path/to/zipsync
 ./conan_build.sh
 ```
 
-The compiled files will be saved in `/path/to/zipsync/build/release`
+The compiled files will be saved in `/path/to/zipsync/build/RelWithDebInfo`
 
 ## Conan compatibility
 Conan doesn't currently know about Apple Clang 21 (shipped with Xcode 16.x). You need to add it manually:
@@ -32,7 +32,7 @@ Save the file.
 
 In Terminal (version 2.14):
 ```
-cd /path/to/zipsync/build/release
+cd /path/to/zipsync/build/RelWithDebInfo
 ```
 
 ```
